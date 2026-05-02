@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Профиль Shiori</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #0f0f13; color: white; padding: 20px; }
+
+        /* ПОДСКАЗКА: Блок статистики в самом верху профиля */
+        .stats-box { background: #1a1a24; padding: 15px; border-radius: 16px; display: flex; justify-content: space-around; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .stat-num { font-size: 24px; font-weight: bold; color: #FFD700; }
+        .stat-label { font-size: 12px; color: #888; }
+
+        h2 { font-size: 18px; margin-bottom: 15px; color: #fff; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .card { background: #232330; border-radius: 12px; overflow: hidden; position: relative; }
+        .card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+        .card-info { padding: 10px; }
+        .title { font-size: 13px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ПОДСКАЗКА: Красивые бейджики для статуса (Смотрел / В планах) */
+        .badge { position: absolute; top: 8px; left: 8px; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; backdrop-filter: blur(5px); }
+        .badge-watched { background: rgba(34, 197, 94, 0.8); }
+        .badge-plan { background: rgba(59, 130, 246, 0.8); }
+
+        .delete-btn { position: absolute; top: 8px; right: 8px; background: rgba(239, 68, 68, 0.9); border: none; border-radius: 50%; width: 28px; height: 28px; color: white; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- БЛОК СТАТИСТИКИ -->
+    <div class="stats-box">
+        <div>
+            <div class="stat-num" id="stat-total">0</div>
+            <div class="stat-label">В списках</div>
+        </div>
+        <div>
+            <div class="stat-num" id="stat-watched">0</div>
+            <div class="stat-label">Просмотрено</div>
+        </div>
+    </div>
+
+    <h2>Твоя коллекция</h2>
+    <div class="grid" id="diary-grid"></div>
+
+    <script>
+        let tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) tg.expand();
+
+        function loadDiary() {
+            const grid = document.getElementById('diary-grid');
+            // ПОДСКАЗКА: Достаем всю базу из памяти браузера
+            let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
+
+            // Обновляем статистику
+            document.getElementById('stat-total').innerText = diary.length;
+            document.getElementById('stat-watched').innerText = diary.filter(a => a.status === 'watched').length;
+
+            if (diary.length === 0) {
+                grid.innerHTML = '<div style="grid-column: span 2; text-align: center; color: #888; margin-top: 40px;">Нет тайтлов. Иди свайпай!</div>';
+                return;
+            }
+
+            // Отрисовываем карточки с учетом статуса
+            grid.innerHTML = diary.map((anime, index) => `
+                <div class="card">
+                    <div class="badge ${anime.status === 'watched' ? 'badge-watched' : 'badge-plan'}">
+                        ${anime.status === 'watched' ? 'Уже смотрел' : 'Буду смотреть'}
+                    </div>
+                    <img src="${anime.image}" alt="poster">
+                    <button class="delete-btn" onclick="deleteAnime(${index})">×</button>
+                    <div class="card-info">
+                        <div class="title">${anime.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteAnime(index) {
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
+            diary.splice(index, 1);
+            localStorage.setItem('shiori_diary', JSON.stringify(diary));
+            loadDiary();
+        }
+
+        loadDiary();
+    </script>
+</body>
+</html>
