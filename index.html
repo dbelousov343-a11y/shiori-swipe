@@ -174,16 +174,17 @@
             document.getElementById('card-tags').innerHTML = currentAnime.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
         }
 
-      function saveToDiary(anime, status) {
+     // --- ОБНОВЛЕННАЯ ФУНКЦИЯ СОХРАНЕНИЯ ---
+function saveToDiary(anime, status) {
     let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
     if (!diary.find(a => a.title === anime.t)) {
         diary.push({
             title: anime.t,
             image: anime.i,
+            desc: anime.d, // Сохраняем описание
             status: status,
-            curEp: 0,          // Начальная серия
-            totalEps: 12,      // По умолчанию 12 (юзер сможет поменять в дневнике)
-            curSeason: 1       // Начальный сезон
+            totalEps: anime.eps || 12, // Берем серии из базы (или 12 по умолчанию)
+            watchedEps: [] // Пустой массив для галочек
         });
         localStorage.setItem('shiori_diary', JSON.stringify(diary));
     }

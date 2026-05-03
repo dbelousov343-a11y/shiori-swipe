@@ -9,67 +9,60 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: #0f0f13; color: white; padding: 20px; }
 
-        /* Шапка и кнопка добавления */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         h1 { color: #FFD700; font-size: 22px; }
-        .add-main-btn { background: #FFD700; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
 
-        /* Сетка карточек */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: #1a1a24; border-radius: 16px; overflow: hidden; position: relative; border: 1px solid #232330; transition: transform 0.2s; }
+        .card { background: #1a1a24; border-radius: 16px; overflow: hidden; position: relative; border: 1px solid #232330; transition: transform 0.2s; cursor: pointer; }
         .card:active { transform: scale(0.98); }
         .card img { width: 100%; height: 180px; object-fit: cover; opacity: 0.8; }
-
         .card-info { padding: 10px; }
         .title { font-size: 13px; font-weight: bold; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Прогресс-бар на карточке */
         .progress-container { width: 100%; height: 4px; background: #333; border-radius: 2px; margin-top: 5px; overflow: hidden; }
         .progress-fill { height: 100%; background: #FFD700; transition: width 0.3s; }
 
-        /* Модальные окна */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); }
-        .modal-content { background: #1a1a24; width: 100%; max-width: 350px; padding: 25px; border-radius: 24px; border: 1px solid #333; }
-        .modal h2 { margin-bottom: 15px; font-size: 18px; color: #FFD700; text-align: center; }
+        /* Всплывающее окно */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px); }
+        .modal-content { background: #1a1a24; width: 100%; max-height: 85vh; padding: 20px; border-radius: 24px 24px 0 0; display: flex; flex-direction: column; animation: slideUp 0.3s ease-out; }
 
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; background: #0f0f13; color: white; outline: none; }
-        .modal-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; margin-top: 5px; }
-        .save-btn { background: #FFD700; color: black; }
-        .close-btn { background: transparent; color: #888; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        /* Панель трекинга (управление сериями) */
-        .track-controls { display: flex; align-items: center; justify-content: space-between; margin: 20px 0; background: #0f0f13; padding: 15px; border-radius: 16px; }
-        .track-btn { background: #333; color: white; border: none; width: 35px; height: 35px; border-radius: 10px; font-size: 20px; }
-        .counter { text-align: center; }
-        .counter-val { font-size: 20px; font-weight: bold; display: block; }
-        .counter-label { font-size: 10px; color: #888; text-transform: uppercase; }
+        .modal-banner { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .modal-title { font-size: 20px; color: #FFD700; margin-bottom: 10px; }
+        .modal-desc { font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .delete-btn-red { color: #ff4d4d; font-size: 12px; background: none; border: none; width: 100%; margin-top: 15px; cursor: pointer; }
+        /* Список серий */
+        .ep-list { flex-grow: 1; overflow-y: auto; padding-right: 5px; margin-bottom: 20px; }
+        .ep-row { display: flex; justify-content: space-between; align-items: center; background: #232330; padding: 12px 15px; border-radius: 12px; margin-bottom: 8px; }
+
+        /* Стилизация красивых галочек */
+        input[type="checkbox"] { appearance: none; width: 24px; height: 24px; border: 2px solid #555; border-radius: 6px; background: transparent; cursor: pointer; position: relative; transition: 0.2s; }
+        input[type="checkbox"]:checked { background: #FFD700; border-color: #FFD700; }
+        input[type="checkbox"]:checked::after { content: "✔"; position: absolute; color: black; font-weight: bold; font-size: 16px; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        .modal-btn { width: 100%; padding: 15px; border-radius: 16px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .save-btn { background: #333; color: white; margin-bottom: 10px; }
+        .delete-btn-red { color: #ff4d4d; font-size: 14px; background: none; border: none; width: 100%; padding: 10px; cursor: pointer; }
+
+        /* Скрываем скроллбар для красоты */
+        .ep-list::-webkit-scrollbar { width: 4px; }
+        .ep-list::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>Shiori Diary 🌸</h1>
-        <button class="add-main-btn" onclick="openAddModal()">+</button>
     </div>
 
     <div class="grid" id="diary-grid"></div>
 
-    <div class="modal" id="add-modal">
-        <div class="modal-content">
-            <h2>Добавить аниме</h2>
-            <input type="text" id="add-title" placeholder="Название аниме">
-            <input type="text" id="add-img" placeholder="Ссылка на постер (необязательно)">
-            <input type="number" id="add-eps" placeholder="Всего серий (например, 12)">
-            <button class="modal-btn save-btn" onclick="addNewAnime()">Добавить в список</button>
-            <button class="modal-btn close-btn" onclick="closeModals()">Отмена</button>
-        </div>
-    </div>
-
-    <div class="modal" id="track-modal">
+    <!-- ОКНО АНИМЕ -->
+    <div class="modal" id="track-modal" onclick="closeOnBg(event)">
         <div class="modal-content" id="track-content">
-            </div>
+            <!-- Вставляется через JS -->
+        </div>
     </div>
 
     <script>
@@ -78,53 +71,29 @@
 
         let currentTrackIndex = null;
 
-        // --- ЛОГИКА МОДАЛОК ---
-        function openAddModal() { document.getElementById('add-modal').style.display = 'flex'; }
-        function closeModals() {
-            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-        }
-
-        // --- ДОБАВЛЕНИЕ ВРУЧНУЮ ---
-        function addNewAnime() {
-            const title = document.getElementById('add-title').value;
-            const img = document.getElementById('add-img').value || "https://via.placeholder.com/200x300?text=No+Poster";
-            const totalEps = parseInt(document.getElementById('add-eps').value) || 12;
-
-            if(!title) return;
-
-            let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
-            diary.push({
-                title: title,
-                image: img,
-                status: 'plan',
-                curEp: 0,
-                totalEps: totalEps,
-                curSeason: 1
-            });
-
-            localStorage.setItem('shiori_diary', JSON.stringify(diary));
-            closeModals();
-            loadDiary();
-        }
-
-        // --- ЗАГРУЗКА СПИСКА ---
+        // --- ЗАГРУЗКА СПИСКА НА ГЛАВНЫЙ ЭКРАН ---
         function loadDiary() {
             const grid = document.getElementById('diary-grid');
             let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
 
             if (diary.length === 0) {
-                grid.innerHTML = '<p style="grid-column: span 2; text-align: center; color: #555; margin-top: 40px;">Список пуст...</p>';
+                grid.innerHTML = '<p style="grid-column: span 2; text-align: center; color: #555; margin-top: 40px;">Список пуст. Иди свайпать!</p>';
                 return;
             }
 
             grid.innerHTML = diary.map((anime, index) => {
-                const progress = (anime.curEp / anime.totalEps) * 100;
+                // Защита от старых сохранений, где не было watchedEps
+                if (!anime.watchedEps) anime.watchedEps = [];
+                if (!anime.totalEps) anime.totalEps = 12;
+
+                const progress = (anime.watchedEps.length / anime.totalEps) * 100;
+
                 return `
                 <div class="card" onclick="openTrackModal(${index})">
                     <img src="${anime.image}">
                     <div class="card-info">
                         <div class="title">${anime.title}</div>
-                        <div style="font-size: 10px; color: #888;">Серия ${anime.curEp} из ${anime.totalEps}</div>
+                        <div style="font-size: 11px; color: #888;">Просмотрено: ${anime.watchedEps.length} / ${anime.totalEps}</div>
                         <div class="progress-container">
                             <div class="progress-fill" style="width: ${progress}%"></div>
                         </div>
@@ -133,61 +102,71 @@
             `}).join('');
         }
 
-        // --- ОКНО УПРАВЛЕНИЯ СЕРИЯМИ ---
+        // --- ОКНО С ПОСТЕРОМ И СЕРИЯМИ ---
         function openTrackModal(index) {
             currentTrackIndex = index;
             let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
             const anime = diary[index];
 
+            // Защита данных
+            if (!anime.watchedEps) anime.watchedEps = [];
+            const desc = anime.desc || "Описание отсутствует. Возможно, аниме было добавлено до обновления базы.";
+
+            let epsHTML = '';
+            for (let i = 1; i <= anime.totalEps; i++) {
+                const isChecked = anime.watchedEps.includes(i) ? 'checked' : '';
+                epsHTML += `
+                    <label class="ep-row">
+                        <span style="font-weight: 500;">Серия ${i}</span>
+                        <input type="checkbox" ${isChecked} onchange="toggleEp(${index}, ${i})">
+                    </label>
+                `;
+            }
+
             const content = document.getElementById('track-content');
             content.innerHTML = `
-                <h2>${anime.title}</h2>
+                <img src="${anime.image}" class="modal-banner">
+                <h2 class="modal-title">${anime.title}</h2>
+                <div class="modal-desc">${desc}</div>
 
-                <div class="track-controls">
-                    <button class="track-btn" onclick="changeSeason(-1)">-</button>
-                    <div class="counter">
-                        <span class="counter-val">${anime.curSeason}</span>
-                        <span class="counter-label">Сезон</span>
-                    </div>
-                    <button class="track-btn" onclick="changeSeason(1)">+</button>
+                <div class="ep-list">
+                    ${epsHTML}
                 </div>
 
-                <div class="track-controls">
-                    <button class="track-btn" onclick="changeEp(-1)">-</button>
-                    <div class="counter">
-                        <span class="counter-val">${anime.curEp} / ${anime.totalEps}</span>
-                        <span class="counter-label">Серии</span>
-                    </div>
-                    <button class="track-btn" onclick="changeEp(1)">+</button>
-                </div>
-
-                <button class="modal-btn save-btn" onclick="closeModals()">Готово</button>
-                <button class="delete-btn-red" onclick="deleteAnime()">Удалить из дневника</button>
+                <button class="modal-btn save-btn" onclick="closeModals()">Закрыть</button>
+                <button class="delete-btn-red" onclick="deleteAnime()">Удалить тайтл</button>
             `;
             document.getElementById('track-modal').style.display = 'flex';
         }
 
-        function changeEp(val) {
+        // --- ЛОГИКА ГАЛОЧЕК ---
+        function toggleEp(animeIndex, epNumber) {
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
             let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
-            let anime = diary[currentTrackIndex];
+            let anime = diary[animeIndex];
 
-            anime.curEp = Math.max(0, Math.min(anime.totalEps, anime.curEp + val));
+            // Если серия уже есть в массиве - удаляем, если нет - добавляем
+            if (anime.watchedEps.includes(epNumber)) {
+                anime.watchedEps = anime.watchedEps.filter(ep => ep !== epNumber);
+            } else {
+                anime.watchedEps.push(epNumber);
+            }
 
-            // Если все серии досмотрены, ставим статус "Смотрел"
-            if(anime.curEp === anime.totalEps) anime.status = 'watched';
+            // Обновляем статус
+            anime.status = (anime.watchedEps.length === anime.totalEps) ? 'watched' : 'plan';
 
             localStorage.setItem('shiori_diary', JSON.stringify(diary));
-            openTrackModal(currentTrackIndex); // Обновить экран
-            loadDiary(); // Обновить список на фоне
+            loadDiary(); // Обновляем прогресс-бар на фоне
         }
 
-        function changeSeason(val) {
-            let diary = JSON.parse(localStorage.getItem('shiori_diary') || '[]');
-            let anime = diary[currentTrackIndex];
-            anime.curSeason = Math.max(1, anime.curSeason + val);
-            // При смене сезона обычно сбрасывают счетчик серий, но оставим на усмотрение юзера
-            localStorage.setItem('shiori_diary', JSON.stringify(diary));
-            openTrackModal(currentTrackIndex);
+        function closeModals() {
+            document.getElementById('track-modal').style.display = 'none';
+        }
+
+        // Закрытие при клике мимо карточки
+        function closeOnBg(e) {
+            if (e.target.id === 'track-modal') closeModals();
         }
 
         function deleteAnime() {
